@@ -1,0 +1,41 @@
+{
+  "authenticationMethod": "route",
+  "logout": {
+      "logoutEndpoint": "/app-logout",
+      "logoutPage": "/"
+  },
+  "routes": [
+      {
+          "source": "^/app/(.*)$",
+          "target": "$1",
+          "localDir": ".",
+          "cacheControl": "no-cache, no-store, must-revalidate",
+          "authenticationType": "none"
+      },
+      {
+          "source": "^/appconfig/",
+          "localDir": ".",
+          "cacheControl": "no-cache, no-store, must-revalidate"
+      },
+      {
+          "source": "^/user-api(.*)",
+          "target": "$1",
+          "service": "sap-approuter-userapi"
+      },
+      {
+          "source": "^/(.*)$",
+          "target": "$1",
+          "destination": "srv-api",
+          "csrfProtection": true,
+          "authenticationType": "none"
+      },
+      {
+        "source": "^/odata/v4/my/(.*)$",
+        "target": "/odata/v4/my/$1",
+        "destination": "HMELCAP",
+        "authenticationType": "xsuaa",
+        "csrfProtection": false
+      }
+  ]
+  }
+  

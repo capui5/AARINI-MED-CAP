@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ClaimReports_view" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="ClaimReports.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MYSERVICE_CLAIM_DETAILS">
+    <resourceUri>MYSERVICE_CLAIM_DETAILS</resourceUri>
+  </DataSource>
+  <DataSource id="MYSERVICE_ZHRMEDICLAIM">
+    <resourceUri>MYSERVICE_ZHRMEDICLAIM</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:AggregationView" id="Aggregation_1">
+    <viewAttributes>
+      <viewAttribute keepFlag="true" id="CLAIM_ID"/>
+      <viewAttribute id="PERSON_NUMBER"/>
+      <viewAttribute id="CLAIM_TYPE"/>
+      <viewAttribute id="TREATMENT_FOR"/>
+      <viewAttribute id="SELECT_DEPENDENTS"/>
+      <viewAttribute id="REQUESTED_AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="TREATMENT_FOR_IF_OTHERS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="MYSERVICE_CLAIM_DETAILS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="REFNR"/>
+      <viewAttribute id="STATUS"/>
+    
+      <viewAttribute id="APPROVED_AMOUNT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MYSERVICE_ZHRMEDICLAIM"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute keepFlag="true" id="CLAIM_ID"/>
+      <viewAttribute id="PERSON_NUMBER"/>
+      <viewAttribute id="CLAIM_TYPE"/>
+      <viewAttribute id="TREATMENT_FOR"/>
+      <viewAttribute id="SELECT_DEPENDENTS"/>
+      <viewAttribute id="REQUESTED_AMOUNT"/>
+      <viewAttribute id="TREATMENT_FOR_IF_OTHERS"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="APPROVED_AMOUNT"/>
+      <viewAttribute hidden="true" id="JOIN$CLAIM_ID$REFNR"/>
+    </viewAttributes>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="TREATMENT_FOR_1" datatype="NVARCHAR" length="40" expressionLanguage="SQL">
+        <formula>CASE &quot;TREATMENT_FOR&quot;
+      WHEN &quot;TREATMENT_FOR&quot; is NULL THEN &quot;TREATMENT_FOR_IF_OTHERS&quot;
+      ELSE &quot;TREATMENT_FOR&quot;
+    END</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
+    <input node="Aggregation_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_ID" source="CLAIM_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PERSON_NUMBER" source="PERSON_NUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_TYPE" source="CLAIM_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TREATMENT_FOR" source="TREATMENT_FOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SELECT_DEPENDENTS" source="SELECT_DEPENDENTS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTED_AMOUNT" source="REQUESTED_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TREATMENT_FOR_IF_OTHERS" source="TREATMENT_FOR_IF_OTHERS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CLAIM_ID$REFNR" source="CLAIM_ID"/>
+    </input>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="APPROVED_AMOUNT" source="APPROVED_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CLAIM_ID$REFNR" source="REFNR"/>
+    </input>
+    <joinAttribute name="JOIN$CLAIM_ID$REFNR"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="CLAIM_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLAIM_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLAIM_ID"/>
+    </attribute>
+    <attribute id="PERSON_NUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PERSON_NUMBER"/>
+      <keyMapping columnObjectName="Join_1" columnName="PERSON_NUMBER"/>
+    </attribute>
+    <attribute id="CLAIM_TYPE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLAIM_TYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLAIM_TYPE"/>
+    </attribute>
+    <attribute id="SELECT_DEPENDENTS" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SELECT_DEPENDENTS"/>
+      <keyMapping columnObjectName="Join_1" columnName="SELECT_DEPENDENTS"/>
+    </attribute>
+    <attribute id="STATUS" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Join_1" columnName="STATUS"/>
+    </attribute>
+    <attribute id="REQUESTED_AMOUNT" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REQUESTED_AMOUNT"/>
+      <keyMapping columnObjectName="Join_1" columnName="REQUESTED_AMOUNT"/>
+    </attribute>
+  
+    <attribute id="APPROVED_AMOUNT" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="APPROVED_AMOUNT"/>
+  
+      <keyMapping columnObjectName="Join_1" columnName="APPROVED_AMOUNT"/>
+  
+    </attribute>
+    <attribute id="TREATMENT_FOR" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TREATMENT_FOR_1"/>
+      <keyMapping columnObjectName="Join_1" columnName="TREATMENT_FOR_1"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+
+  <sortAttributes>
+
+    <sortAttribute id="CLAIM_ID" direction="ASC"/>
+
+  </sortAttributes>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="100" y="105"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Aggregation_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-39" y="340"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="235" y="340"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="192"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape modelObjectName="Aggregation_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

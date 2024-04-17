@@ -1,0 +1,133 @@
+_schema-version: "3.1"
+ID: HMEL_MED_CAP
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: HMEL_MED_CAP-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: HMEL_MED_CAP-db
+  - name: HMEL_MED_CAP_XSUAA
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm
+- name: HMEL_MED_CAP-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: HMEL_MED_CAP-db
+    properties:
+      TARGET_CONTAINER: ~{hdi-service-name}
+  - name: UPS_HMEL
+  parameters:
+    buildpack: nodejs_buildpack
+- name: HMEL_MED_CAP-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: HMEL_MED_CAP-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - hmelclaimshmelclaim.zip
+      name: hmelclaimshmelclaim
+      target-path: resources/
+- name: hmelclaimshmelclaim
+  type: html5
+  path: app/hmelclaim
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: HMEL_MED_CAP-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: HMEL_MED_CAP-destination-service
+    parameters:
+      content-target: true
+  - name: HMEL_MED_CAP-repo-host
+    parameters:
+      service-key:
+        name: HMEL_MED_CAP-repo-host-key
+  - name: uaa_HMEL_MED_CAP
+    parameters:
+      service-key:
+        name: uaa_HMEL_MED_CAP-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: hmel_HMEL_MED_CAP_repo_host
+          ServiceInstanceName: HMEL_MED_CAP-html5-srv
+          ServiceKeyName: HMEL_MED_CAP-repo-host-key
+          sap.cloud.service: hmel
+        - Authentication: OAuth2UserTokenExchange
+          Name: hmel_uaa_HMEL_MED_CAP
+          ServiceInstanceName: HMEL_MED_CAP-xsuaa-service
+          ServiceKeyName: uaa_HMEL_MED_CAP-key
+          sap.cloud.service: hmel
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: HMEL_MED_CAP-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    config:
+      makeUniqueName: false
+      schema: HMEL_MED_CAP
+    service-name: HMEL_MED_CAP_HDI
+  properties:
+    hdi-service-name: ${service-name}
+- name: UPS_HMEL
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: UPS_HMEL
+- name: HMEL_MED_CAP_XSUAA
+  type: org.cloudfoundry.existing-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: HMEL_MED_CAP-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: HMEL_MED_CAP-html5-srv
+    service-plan: app-host
+- name: HMEL_MED_CAP-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: HMEL_MED_CAP-destination-service
+    service-plan: lite
+- name: uaa_HMEL_MED_CAP
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: HMEL_MED_CAP-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npx -p @sap/cds-dk cds build --production

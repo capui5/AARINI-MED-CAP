@@ -1,0 +1,22 @@
+{
+  "HMEL_PROJECT_HC_PA0167": {
+    "target": {
+      "object": "PA0167"
+    }
+  },
+  "HMEL_PROJECT_HC_PA0171": {
+    "target": {
+      "object": "PA0171"
+    }
+  },
+  "HMEL_PROJECT_CLAIMREPORTS": {
+    "target": {
+      "object": "ClaimReports_view"
+    }
+  },
+  "HMEL_PROJECT_MANAGECALIMS": {
+    "target": {
+      "object": "Managecalims_view"
+    }
+  }
+}

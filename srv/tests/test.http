@@ -1,0 +1,51 @@
+#  GET https://hpcl-mittal-energy-limited-smart-connect-dr3-uv65q9xq-s30533d32.cfapps.ap11.hana.ondemand.com/odata/v4/my/validations(endDate='2024-02-14',startDate='2024-02-11',requestedAmount=5000)
+
+# ###
+# GET http://localhost:4004/odata/v4/my/CLAIM_DETAILS
+
+ ###
+# POST http://localhost:38313/odata/v4/my/CLAIM_DETAILS
+# Content-Type: application/json
+
+# {
+#   "CLAIM_ID": 17,
+#   "PERSON_NUMBER": 989898,
+#   "CLAIM_TYPE": "(IPD) IN-PATIENT DEPARTMENT",
+#   "CLAIM_START_DATE": "2024-02-01T00:00:00.000Z",
+#   "CLAIM_END_DATE": "2024-02-06T00:00:00.000Z",
+#   "TREATMENT_FOR": "Cancer",
+#   "TREATMENT_FOR_IF_OTHERS": "cancer",
+#   "SELECT_DEPENDENTS": "self",
+#   "REQUESTED_AMOUNT": 8000,
+#   "CONSULTANCY_CATEGORY": "Nursing Charges",
+#   "MEDICAL_STORE": "Apollo Clinic",
+#   "BILL_DATE": "2024-02-03T00:00:00.000Z",
+#   "BILL_NO": 12345,
+#   "BILL_AMOUNT": 20000
+# }
+
+
+
+# ###
+# GET http://localhost:41397/odata/v4/my/validations(endDate=2024-02-14,startDate=2024-02-11,requestedAmount=4000,category='OXYGEN')
+
+# ###
+# GET http://localhost:4004/odata/v4/my/policyValidations(policyNumber='13050034170500000004',startDate=2024-04-02,illnessName='BLOOD PRESSURE')
+
+PATCH https://port4004-workspaces-ws-pg94l.ap11.applicationstudio.cloud.sap/odata/v4/my/ClaimReports
+Content-Type: application/json
+
+ {
+      "CLAIM_ID": 4,
+      "PERSON_NUMBER": 989898,
+      "CLAIM_TYPE": "(IPD) IN-PATIENT DEPARTMENT",
+      "TREATMENT_FOR": "BLOOD PRESSURE",
+      "TREATMENT_FOR_IF_OTHERS": "",
+      "SELECT_DEPENDENTS": "SELF",
+      "REQUESTED_AMOUNT": 2000,
+      "STATUS": "SUBMITTED",
+      "APPROVED_AMOUNT": 0
+    }
+
+
+          
