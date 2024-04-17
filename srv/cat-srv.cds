@@ -1,12 +1,12 @@
-using {hmel_project as hm} from '../db/data-model';
+using {AARINI_MED_CLAIM as hm} from '../db/data-model';
 
 
 service MyService {
 
-    entity HC_PA0167    as projection on hm.HC_PA0167;
-    entity HC_PA0171    as projection on hm.HC_PA0171;
+
     entity ClaimReports as projection on hm.ClaimReports;
     entity ManageClaims as projection on hm.Managecalims;
+    entity ClaimDetails as projection on hm.ClaimDetails;
 
 
     entity ZHRMED_POLICY {
@@ -76,6 +76,8 @@ service MyService {
         RETYP : String(4);
     }
 
+
+
     entity CLAIM_DETAILS {
         key ID                      : UUID;
             CLAIM_ID                : Integer;
@@ -85,8 +87,12 @@ service MyService {
             CLAIM_END_DATE          : Timestamp;
             TREATMENT_FOR           : String(40);
             TREATMENT_FOR_IF_OTHERS : String(40);
+            TREATMENT_TYPE          : String(40);
             SELECT_DEPENDENTS       : String(40);
             SUBMITTED_DATE          : Date;
+            DOCTOR_NAME             : String(40);
+            PATIENT_ID              : String;
+            HOSPITAL_LOCATION       : String(40);
             REQUESTED_AMOUNT        : Integer;
             CONSULTANCY_CATEGORY    : String(40);
             MEDICAL_STORE           : String(40);
@@ -94,7 +100,8 @@ service MyService {
             BILL_NO                 : String;
             BILL_AMOUNT             : Integer;
             DISCOUNT                : Integer;
-            // STATUS                  : String;
+            REVIEW                  : String(100);
+            STATUS                  : String;
             APPROVED_AMOUNT         : Decimal(15, 2);
             ATTACHMENTS             : LargeBinary;
 
@@ -146,7 +153,7 @@ service MyService {
                         bill_no : String,
                         bill_amount : Integer,
                         discount : Integer,
-                        approved_amount : Decimal(15, 2))                                                                                                                                 returns Integer;
+                        approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
 
 
 }

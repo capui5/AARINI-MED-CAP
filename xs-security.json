@@ -1,5 +1,5 @@
 {
-  "xsappname": "hmel_med_cap",
+  "xsappname": "AARINI_MED_CAP",
   "tenant-mode": "dedicated",
   "description": "Security profile of called application",
   "scopes": [

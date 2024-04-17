@@ -1,1 +1,0 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"],function(n){"use strict";return n.extend("hmel.claims.hmelclaim.controller.Login",{onInit:function(){},OnLogin:function(){var n=sap.ui.core.UIComponent.getRouterFor(this);n.navTo("ess")}})});

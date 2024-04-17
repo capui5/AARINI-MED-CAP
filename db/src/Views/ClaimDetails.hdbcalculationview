@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="ClaimDetails" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="ClaimDetails.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="MYSERVICE_CLAIM_DETAILS">
+    <resourceUri>MYSERVICE_CLAIM_DETAILS</resourceUri>
+  </DataSource>
+  <DataSource id="MYSERVICE_ZHRMEDICLAIM">
+    <resourceUri>MYSERVICE_ZHRMEDICLAIM</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="CLAIM_ID"/>
+      <viewAttribute id="PERSON_NUMBER"/>
+      <viewAttribute id="CLAIM_TYPE"/>
+      <viewAttribute id="CLAIM_START_DATE"/>
+      <viewAttribute id="CLAIM_END_DATE"/>
+      <viewAttribute id="TREATMENT_FOR"/>
+      <viewAttribute id="TREATMENT_FOR_IF_OTHERS"/>
+      <viewAttribute id="TREATMENT_TYPE"/>
+      <viewAttribute id="SELECT_DEPENDENTS"/>
+      <viewAttribute id="SUBMITTED_DATE"/>
+      <viewAttribute id="DOCTOR_NAME"/>
+      <viewAttribute id="PATIENT_ID"/>
+      <viewAttribute id="HOSPITAL_LOCATION"/>
+      <viewAttribute id="REQUESTED_AMOUNT"/>
+      <viewAttribute id="CONSULTANCY_CATEGORY"/>
+      <viewAttribute id="MEDICAL_STORE"/>
+      <viewAttribute id="BILL_DATE"/>
+      <viewAttribute id="BILL_NO"/>
+      <viewAttribute id="BILL_AMOUNT"/>
+      <viewAttribute id="DISCOUNT"/>
+      <viewAttribute id="REVIEW"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="APPROVED_AMOUNT"/>
+      <viewAttribute id="ATTACHMENTS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MYSERVICE_CLAIM_DETAILS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="REFNR"/>
+      <viewAttribute id="SETTLEMENT_DATE"/>
+      <viewAttribute id="HR_REMARKS"/>
+      <viewAttribute id="NIA_DATE"/>
+      <viewAttribute id="CHECK_NO"/>
+      <viewAttribute id="BATCH_NO"/>
+      <viewAttribute id="BANK_NAME"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="APPROVED_AMOUNT"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="MYSERVICE_ZHRMEDICLAIM"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+    <viewAttributes>
+      <viewAttribute keepFlag="true" id="CLAIM_ID" aggregationType="sum"/>
+      <viewAttribute id="PERSON_NUMBER" aggregationType="sum"/>
+      <viewAttribute id="CLAIM_TYPE"/>
+      <viewAttribute id="CLAIM_START_DATE" aggregationType="min"/>
+      <viewAttribute id="CLAIM_END_DATE" aggregationType="min"/>
+      <viewAttribute id="TREATMENT_FOR"/>
+      <viewAttribute id="TREATMENT_FOR_IF_OTHERS"/>
+      <viewAttribute id="SELECT_DEPENDENTS"/>
+      <viewAttribute id="SUBMITTED_DATE"/>
+      <viewAttribute id="DOCTOR_NAME"/>
+      <viewAttribute id="PATIENT_ID"/>
+      <viewAttribute id="HOSPITAL_LOCATION"/>
+      <viewAttribute id="REQUESTED_AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="CONSULTANCY_CATEGORY"/>
+      <viewAttribute id="MEDICAL_STORE"/>
+      <viewAttribute id="BILL_DATE" aggregationType="min"/>
+      <viewAttribute id="BILL_NO"/>
+      <viewAttribute id="BILL_AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="DISCOUNT" aggregationType="sum"/>
+      <viewAttribute id="APPROVED_AMOUNT" aggregationType="sum"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="TREATMENT_TYPE"/>
+      <viewAttribute id="REVIEW"/>
+      <viewAttribute hidden="true" id="JOIN$CLAIM_ID$REFNR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_ID" source="CLAIM_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PERSON_NUMBER" source="PERSON_NUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_TYPE" source="CLAIM_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_START_DATE" source="CLAIM_START_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CLAIM_END_DATE" source="CLAIM_END_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TREATMENT_FOR" source="TREATMENT_FOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TREATMENT_FOR_IF_OTHERS" source="TREATMENT_FOR_IF_OTHERS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SELECT_DEPENDENTS" source="SELECT_DEPENDENTS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SUBMITTED_DATE" source="SUBMITTED_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DOCTOR_NAME" source="DOCTOR_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PATIENT_ID" source="PATIENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HOSPITAL_LOCATION" source="HOSPITAL_LOCATION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTED_AMOUNT" source="REQUESTED_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONSULTANCY_CATEGORY" source="CONSULTANCY_CATEGORY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MEDICAL_STORE" source="MEDICAL_STORE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILL_DATE" source="BILL_DATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILL_NO" source="BILL_NO"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BILL_AMOUNT" source="BILL_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DISCOUNT" source="DISCOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TREATMENT_TYPE" source="TREATMENT_TYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REVIEW" source="REVIEW"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CLAIM_ID$REFNR" source="CLAIM_ID"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="APPROVED_AMOUNT" source="APPROVED_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CLAIM_ID$REFNR" source="REFNR"/>
+    </input>
+    <joinAttribute name="JOIN$CLAIM_ID$REFNR"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="CLAIM_TYPE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CLAIM_TYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="CLAIM_TYPE"/>
+    </attribute>
+    <attribute id="TREATMENT_FOR" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TREATMENT_FOR"/>
+      <keyMapping columnObjectName="Join_1" columnName="TREATMENT_FOR"/>
+    </attribute>
+    <attribute id="TREATMENT_FOR_IF_OTHERS" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TREATMENT_FOR_IF_OTHERS"/>
+      <keyMapping columnObjectName="Join_1" columnName="TREATMENT_FOR_IF_OTHERS"/>
+    </attribute>
+    <attribute id="SELECT_DEPENDENTS" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SELECT_DEPENDENTS"/>
+      <keyMapping columnObjectName="Join_1" columnName="SELECT_DEPENDENTS"/>
+    </attribute>
+    <attribute id="SUBMITTED_DATE" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SUBMITTED_DATE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SUBMITTED_DATE"/>
+    </attribute>
+    <attribute id="DOCTOR_NAME" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DOCTOR_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="DOCTOR_NAME"/>
+    </attribute>
+    <attribute id="PATIENT_ID" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PATIENT_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PATIENT_ID"/>
+    </attribute>
+    <attribute id="HOSPITAL_LOCATION" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="HOSPITAL_LOCATION"/>
+      <keyMapping columnObjectName="Join_1" columnName="HOSPITAL_LOCATION"/>
+    </attribute>
+    <attribute id="CONSULTANCY_CATEGORY" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CONSULTANCY_CATEGORY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CONSULTANCY_CATEGORY"/>
+    </attribute>
+    <attribute id="MEDICAL_STORE" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MEDICAL_STORE"/>
+      <keyMapping columnObjectName="Join_1" columnName="MEDICAL_STORE"/>
+    </attribute>
+    <attribute id="BILL_NO" order="17" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BILL_NO"/>
+      <keyMapping columnObjectName="Join_1" columnName="BILL_NO"/>
+    </attribute>
+    <attribute id="STATUS" order="21" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Join_1" columnName="STATUS"/>
+    </attribute>
+  
+    <attribute id="TREATMENT_TYPE" order="22" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TREATMENT_TYPE"/>
+  
+      <keyMapping columnObjectName="Join_1" columnName="TREATMENT_TYPE"/>
+  
+    </attribute>
+  
+    <attribute id="REVIEW" order="23" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REVIEW"/>
+      <keyMapping columnObjectName="Join_1" columnName="REVIEW"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="CLAIM_ID" order="1" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CLAIM_ID"/>
+      <measureMapping columnObjectName="Join_1" columnName="CLAIM_ID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="PERSON_NUMBER" order="2" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="PERSON_NUMBER"/>
+      <measureMapping columnObjectName="Join_1" columnName="PERSON_NUMBER"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CLAIM_START_DATE" order="4" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CLAIM_START_DATE"/>
+      <measureMapping columnObjectName="Join_1" columnName="CLAIM_START_DATE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CLAIM_END_DATE" order="5" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CLAIM_END_DATE"/>
+      <measureMapping columnObjectName="Join_1" columnName="CLAIM_END_DATE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="REQUESTED_AMOUNT" order="13" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="REQUESTED_AMOUNT"/>
+      <measureMapping columnObjectName="Join_1" columnName="REQUESTED_AMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="BILL_DATE" order="16" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="BILL_DATE"/>
+      <measureMapping columnObjectName="Join_1" columnName="BILL_DATE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="BILL_AMOUNT" order="18" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="BILL_AMOUNT"/>
+      <measureMapping columnObjectName="Join_1" columnName="BILL_AMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="DISCOUNT" order="19" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DISCOUNT"/>
+      <measureMapping columnObjectName="Join_1" columnName="DISCOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="APPROVED_AMOUNT" order="20" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="APPROVED_AMOUNT"/>
+      <measureMapping columnObjectName="Join_1" columnName="APPROVED_AMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-25" y="338"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="211" y="333"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="193"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="249"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="200"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>
