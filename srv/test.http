@@ -1,0 +1,29 @@
+###
+GET http://localhost:4004/odata/v4/my/CLAIM_DETAILS
+Content-Type: application/json
+
+{
+      "CLAIM_ID": 23,
+      "PERSON_NUMBER": 90,
+      "CLAIM_TYPE": "(OPD) OUTPATIENT DEPARTMENT",
+      "CLAIM_START_DATE": "2024-04-14T18:30:00.000Z",
+      "CLAIM_END_DATE": "2024-04-16T18:30:00.000Z",
+      "TREATMENT_FOR": "CANCER",
+      "TREATMENT_FOR_IF_OTHERS": null,
+      "TREATMENT_TYPE": "AYURVEDIC",
+      "SELECT_DEPENDENTS": "SELF",
+      "SUBMITTED_DATE": "2024-04-15",
+      "DOCTOR_NAME": "sada",
+      "PATIENT_ID": "123",
+      "HOSPITAL_LOCATION": "AMRITSAR",
+      "REQUESTED_AMOUNT": 5000,
+      "CONSULTANCY_CATEGORY": "ANAESTHETIST FEES",
+      "MEDICAL_STORE": "APOLLO CLINIC",
+      "BILL_DATE": "2024-04-15T00:00:00.000Z",
+      "BILL_NO": "123",
+      "BILL_AMOUNT": 5000,
+      "DISCOUNT": 0,
+      "REVIEW": "",
+      "STATUS": null,
+      "APPROVED_AMOUNT": 0
+    }

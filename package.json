@@ -6,47 +6,55 @@
     "license": "UNLICENSED",
     "private": true,
     "dependencies": {
-      "@sap/cds": "^7",
-      "@sap/cds-hana": "^2",
-      "@sap/cds-odata-v2-adapter-proxy": "^1.7.11",
-      "@sap/hana-client": "^2.6.61",
-      "@sap/hdbext": "^7.6.5",
-      "@sap/hdi-deploy": "^5.0.1",
-      "@sap/xsenv": "4.2.0",
-      "@sap/xssec": "^3",
-      "ci": "^2.3.0",
-      "core-util-is": "^1.0.3",
-      "express": "^4",
-      "hdb": "^0.18.3",
-      "passport": "^0",
-      "registry.npmjs.org": "^1.0.1",
-      "sap-hdbext-promisfied": "^2.202206.1"
+        "@sap-cloud-sdk/http-client": "^3.14.0",
+        "@sap-cloud-sdk/resilience": "^3.14.0",
+        "@sap/cds": "^7",
+        "@sap/cds-hana": "^2",
+        "@sap/cds-odata-v2-adapter-proxy": "^1.7.11",
+        "@sap/hana-client": "^2.6.61",
+        "@sap/hdbext": "^7.6.5",
+        "@sap/hdi-deploy": "^5.0.1",
+        "@sap/xsenv": "4.2.0",
+        "@sap/xssec": "^3",
+        "ci": "^2.3.0",
+        "core-util-is": "^1.0.3",
+        "express": "^4",
+        "hdb": "^0.18.3",
+        "passport": "^0",
+        "registry.npmjs.org": "^1.0.1",
+        "sap-hdbext-promisfied": "^2.202206.1"
     },
     "devDependencies": {
-      "@cap-js/sqlite": "^1",
-      "@sap/cds-dk": "^7"
+        "@cap-js/sqlite": "^1",
+        "@sap/cds-dk": "^7"
     },
     "scripts": {
-      "start": "cds-serve"
+        "start": "cds-serve"
     },
     "cds": {
-      "hana": {
-        "deploy-format": "hdbtable"
-      },
-      "requires": {
-        "auth": "dummy",
-        "db": {
-          "kind": "hana",
-          "model": [
-            "db",
-            "srv"
-          ]
+        "hana": {
+            "deploy-format": "hdbtable"
+        },
+        "requires": {
+            "auth": "dummy",
+            "db": {
+                "kind": "hana",
+                "model": [
+                    "db",
+                    "srv"
+                ]
+            },
+            "WORK_SPA": {
+                "kind": "rest",
+                "credentials": {
+                    "destination": "spa-processautomation_old",
+                    "forwardAuthToken": true
+                }
+            }
         }
-      }
     },
     "files": [
-      "db",
-      "srv"
+        "db",
+        "srv"
     ]
-  }
-  
+}

@@ -128,56 +128,85 @@ module.exports = cds.service.impl(srv => {
 
     //Submit to HANA DB
     
+    // srv.on('submitData',async(req)=>{
+    //     const{claim_id,person_number,claim_type,claim_start_date,claim_end_date,treatment_for,
+    //         treatment_for_if_others,select_dependents,requested_amount,consultancy_category,
+    //         medical_store,bill_date,bill_no,bill_amount,discount,approved_amount}=req.data
+
+    //         try {
+    //             // Define a function to insert data into HANA database
+    //             async function submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
+    //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
+    //                 medical_store, bill_date, bill_no, bill_amount, discount, approved_amount) {
+        
+    //                 // Use CAP CDS (Core Data Services) to run an INSERT statement
+    //                 await srv.tx(req).run(INSERT.into('MYSERVICE_CLAIM_DETAILS').entries({
+    //                     CLAIM_ID: claim_id,
+    //                     PERSON_NUMBER: person_number,
+    //                     CLAIM_TYPE: claim_type,
+    //                     CLAIM_START_DATE: claim_start_date,
+    //                     CLAIM_END_DATE: claim_end_date,
+    //                     TREATMENT_FOR: treatment_for,
+    //                     TREATMENT_FOR_IF_OTHERS: treatment_for_if_others,
+    //                     SELECT_DEPENDENTS: select_dependents,
+    //                     REQUESTED_AMOUNT: requested_amount,
+    //                     CONSULTANCY_CATEGORY: consultancy_category,
+    //                     MEDICAL_STORE: medical_store,
+    //                     BILL_DATE: bill_date,
+    //                     BILL_NO: bill_no,
+    //                     BILL_AMOUNT: bill_amount,
+    //                     DISCOUNT: discount,
+    //                     APPROVED_AMOUNT: approved_amount
+    //                 }));
+        
+    //                 console.log('Data inserted successfully.');
+    //             }
+        
+    //             // Call the submit function with the provided data
+    //             await submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
+    //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
+    //                 medical_store, bill_date, bill_no, bill_amount, discount, approved_amount);
+    //         } catch (error) {
+    //             console.error('Error inserting data:', error);
+    //         }
+        
+         
+    // })
+
+
     srv.on('submitData',async(req)=>{
         const{claim_id,person_number,claim_type,claim_start_date,claim_end_date,treatment_for,
             treatment_for_if_others,select_dependents,requested_amount,consultancy_category,
             medical_store,bill_date,bill_no,bill_amount,discount,approved_amount}=req.data
-
             try {
-                // Define a function to insert data into HANA database
-                async function submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
-                    treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
-                    medical_store, bill_date, bill_no, bill_amount, discount, approved_amount) {
-        
-                    // Use CAP CDS (Core Data Services) to run an INSERT statement
-                    await srv.tx(req).run(INSERT.into('MYSERVICE_CLAIM_DETAILS').entries({
-                        CLAIM_ID: claim_id,
-                        PERSON_NUMBER: person_number,
-                        CLAIM_TYPE: claim_type,
-                        CLAIM_START_DATE: claim_start_date,
-                        CLAIM_END_DATE: claim_end_date,
-                        TREATMENT_FOR: treatment_for,
-                        TREATMENT_FOR_IF_OTHERS: treatment_for_if_others,
-                        SELECT_DEPENDENTS: select_dependents,
-                        REQUESTED_AMOUNT: requested_amount,
-                        CONSULTANCY_CATEGORY: consultancy_category,
-                        MEDICAL_STORE: medical_store,
-                        BILL_DATE: bill_date,
-                        BILL_NO: bill_no,
-                        BILL_AMOUNT: bill_amount,
-                        DISCOUNT: discount,
-                        APPROVED_AMOUNT: approved_amount
-                    }));
-        
-                    console.log('Data inserted successfully.');
-                }
-        
-                // Call the submit function with the provided data
-                await submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
-                    treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
-                    medical_store, bill_date, bill_no, bill_amount, discount, approved_amount);
+                const workflow = await cds.connect.to('WORK_SPA');
+                var triggerWorkflow = await workflow.tx(req).post('/workflow-instances', {
+                    "definitionId": "eu10.aarini-development.mediclaim.mediclaimwf",
+                    "context": {
+                        // "bill_no": bill_no,
+                        // "claim_id": claim_id,
+                        // "claim_type": claim_type,
+                        // "bill_amount": bill_amount,
+                        // "bill_date": bill_date,
+                        // "claim_start_date": claim_start_date,
+                        // "claim_end_date": claim_end_date,
+                        // "treatment_for": treatment_for,
+                        // "managerapproval": ""
+                        "bill_no": "asdsa",
+                        "claim_id": 109,
+                        "claim_type": "(IPD) IN-PATIENT DEPARTMENT",
+                        "bill_amount": 5000,
+                        "bill_date": "2024-03-13T23:00:00.000Z",
+                        "claim_start_date": "2024-03-05T23:00:00.000Z",
+                        "claim_end_date": "2024-03-21T23:00:00.000Z",
+                        "treatment_for": "BLOOD PRESSURE",
+                        "managerapproval": "true"
+                    }
+                });
             } catch (error) {
-                console.error('Error inserting data:', error);
-            }
-        
-         
+                console.log(error);
+            }      
     })
-
-
-   
-
-
-
 
 
 

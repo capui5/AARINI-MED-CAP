@@ -59,7 +59,7 @@
     <calculatedViewAttributes/>
     <input node="MYSERVICE_ZHRMEDICLAIM"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="inner">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="CN_N" joinType="leftOuter">
     <viewAttributes>
       <viewAttribute keepFlag="true" id="CLAIM_ID" aggregationType="sum"/>
       <viewAttribute id="PERSON_NUMBER" aggregationType="sum"/>
@@ -179,7 +179,9 @@
   
     <attribute id="REVIEW" order="23" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="REVIEW"/>
+  
       <keyMapping columnObjectName="Join_1" columnName="REVIEW"/>
+  
     </attribute>
   </attributes>
   <calculatedAttributes/>
