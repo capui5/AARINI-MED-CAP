@@ -1,4 +1,6 @@
 const cds = require('@sap/cds');
+// const axios = require('axios');
+const FormData = require('form-data');
 
 module.exports = cds.service.impl(srv => {
     srv.on('validations', async (req) => {
@@ -41,12 +43,6 @@ module.exports = cds.service.impl(srv => {
             };
         }
     });
-
-    
-    
-
-
-
 
     //VALIDATION FOR POLICY DETAILS//
 
@@ -98,6 +94,7 @@ module.exports = cds.service.impl(srv => {
             return { success: false, message: 'An error occurred during policy validation. Please try again later.' };
         }
     });
+
     // Function to calculate difference in months between two dates
     function calculateMonthDifference(date1, date2) {
         return (date2.getFullYear() - date1.getFullYear()) * 12 + (date2.getMonth() - date1.getMonth());
@@ -127,7 +124,7 @@ module.exports = cds.service.impl(srv => {
     });
 
     //Submit to HANA DB
-    
+
     // srv.on('submitData',async(req)=>{
     //     const{claim_id,person_number,claim_type,claim_start_date,claim_end_date,treatment_for,
     //         treatment_for_if_others,select_dependents,requested_amount,consultancy_category,
@@ -138,7 +135,7 @@ module.exports = cds.service.impl(srv => {
     //             async function submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
     //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
     //                 medical_store, bill_date, bill_no, bill_amount, discount, approved_amount) {
-        
+
     //                 // Use CAP CDS (Core Data Services) to run an INSERT statement
     //                 await srv.tx(req).run(INSERT.into('MYSERVICE_CLAIM_DETAILS').entries({
     //                     CLAIM_ID: claim_id,
@@ -158,10 +155,10 @@ module.exports = cds.service.impl(srv => {
     //                     DISCOUNT: discount,
     //                     APPROVED_AMOUNT: approved_amount
     //                 }));
-        
+
     //                 console.log('Data inserted successfully.');
     //             }
-        
+
     //             // Call the submit function with the provided data
     //             await submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
     //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
@@ -169,48 +166,77 @@ module.exports = cds.service.impl(srv => {
     //         } catch (error) {
     //             console.error('Error inserting data:', error);
     //         }
-        
-         
+
+
     // })
 
 
-    srv.on('submitData',async(req)=>{
-        const{claim_id,person_number,claim_type,claim_start_date,claim_end_date,treatment_for,
-            treatment_for_if_others,select_dependents,requested_amount,consultancy_category,
-            medical_store,bill_date,bill_no,bill_amount,discount,approved_amount}=req.data
-            try {
-                const workflow = await cds.connect.to('WORK_SPA');
-                var triggerWorkflow = await workflow.tx(req).post('/workflow-instances', {
-                    "definitionId": "eu10.aarini-development.mediclaim.mediclaimwf",
-                    "context": {
-                        // "bill_no": bill_no,
-                        // "claim_id": claim_id,
-                        // "claim_type": claim_type,
-                        // "bill_amount": bill_amount,
-                        // "bill_date": bill_date,
-                        // "claim_start_date": claim_start_date,
-                        // "claim_end_date": claim_end_date,
-                        // "treatment_for": treatment_for,
-                        // "managerapproval": ""
-                        "bill_no": "asdsa",
-                        "claim_id": 109,
-                        "claim_type": "(IPD) IN-PATIENT DEPARTMENT",
-                        "bill_amount": 5000,
-                        "bill_date": "2024-03-13T23:00:00.000Z",
-                        "claim_start_date": "2024-03-05T23:00:00.000Z",
-                        "claim_end_date": "2024-03-21T23:00:00.000Z",
-                        "treatment_for": "BLOOD PRESSURE",
-                        "managerapproval": "true"
-                    }
-                });
-            } catch (error) {
-                console.log(error);
-            }      
+    srv.on('submitData', async (req) => {
+        const { claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
+            treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
+            medical_store, bill_date, bill_no, bill_amount, discount, approved_amount } = req.data
+        try {
+            const workflow = await cds.connect.to('WORK_SPA');
+            var triggerWorkflow = await workflow.tx(req).post('/workflow-instances', {
+                "definitionId": "eu10.aarini-development.mediclaim.mediclaimwf",
+                "context": {
+                    // "bill_no": bill_no,
+                    // "claim_id": claim_id,
+                    // "claim_type": claim_type,
+                    // "bill_amount": bill_amount,
+                    // "bill_date": bill_date,
+                    // "claim_start_date": claim_start_date,
+                    // "claim_end_date": claim_end_date,
+                    // "treatment_for": treatment_for,
+                    // "managerapproval": ""
+                    "bill_no": "asdsa",
+                    "claim_id": 109,
+                    "claim_type": "(IPD) IN-PATIENT DEPARTMENT",
+                    "bill_amount": 5000,
+                    "bill_date": "2024-03-13T23:00:00.000Z",
+                    "claim_start_date": "2024-03-05T23:00:00.000Z",
+                    "claim_end_date": "2024-03-21T23:00:00.000Z",
+                    "treatment_for": "BLOOD PRESSURE",
+                    "managerapproval": "true"
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
     })
 
+    //Create Folder using DMS
+    async function createFolder(req, folderName) {
+        console.log("createFolder invoked");
+        console.log(folderName)
+
+        const cmisService = await cds.connect.to("DMS_TDD");
+        try {
+
+            console.log("Folder " + folderName + " is not available in the DMS");
+
+            const data =
+                `cmisaction=createFolder` +
+                `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
+                `&propertyId[0]=cmis:name` +
+                `&propertyValue[0]=${folderName}` +
+                `&propertyId[1]=cmis:objectTypeId` +
+                `&propertyValue[1]=cmis:folder` +
+                `&succinct=true`;
+
+            const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+
+            await cmisService.send({ method: "POST", path: "/", data, 
+         });
+            return true;
+        }
+        catch (error) {
+            console.log("Error while creating folder")
+            return error;
+        }
 
 
-
+    }
 
 });
 
