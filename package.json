@@ -16,6 +16,7 @@
         "@sap/hdi-deploy": "^5.0.1",
         "@sap/xsenv": "4.2.0",
         "@sap/xssec": "^3",
+        "axios": "^1.6.8",
         "ci": "^2.3.0",
         "core-util-is": "^1.0.3",
         "express": "^4",
@@ -49,6 +50,13 @@
                 "credentials": {
                     "destination": "spa-processautomation_old",
                     "forwardAuthToken": true
+                }
+            },
+            "DMS": {
+                "kind": "rest",
+                "credentials": {
+                    "destination": "DMS_TDD",
+                    "requestTimeout": 30000
                 }
             }
         }
