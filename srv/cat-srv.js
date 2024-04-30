@@ -231,7 +231,7 @@ module.exports = cds.service.impl(srv => {
             return true;
         }
         catch (error) {
-            console.log("Error while creating folder")
+            console.log("Error while creating folder");
             return error;
         }
 
