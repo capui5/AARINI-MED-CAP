@@ -1,0 +1,33 @@
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
+let data = new FormData();
+data.append('objectId', 'L5i3MUCn7iG74HIb9EGEUHpYDwU1b6j4sFbNdCcyyTc');
+data.append('cmisaction', 'createDocument');
+data.append('propertyId[0]', 'cmis:name');
+data.append('propertyValue[0]', 'test');
+data.append('propertyId[1]', 'cmis:objectTypeId');
+data.append('propertyValue[1]', 'cmis:document');
+data.append('succinct', 'true');
+data.append('filename', fs.createReadStream('/C:/Users/Ashwin/Pictures/Screenshots/Screenshot 2024-04-30 143324.png'));
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'https://api-sdm-di.cfapps.eu10.hana.ondemand.com/browser/0648bb78-88ca-4e7d-a999-087eecf8fbe4/root/MEDICAL CLAIM/DOCUMENT PRESCRIPTION/test',
+  headers: { 
+    'x-EcmUserEnc': 'IV', 
+    'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vZGV2ZWxvcG1lbnQtYWFyaW5pLmF1dGhlbnRpY2F0aW9uLmV1MTAuaGFuYS5vbmRlbWFuZC5jb20vdG9rZW5fa2V5cyIsImtpZCI6ImRlZmF1bHQtand0LWtleS0xMDM2NDI3ODY5IiwidHlwIjoiSldUIiwiamlkIjogIlRrWnJ4eXlUek8yWnJvT2hnc1NYS2duNi9XeXpCaS9lOVN6WEh6WFlsK1E9In0.eyJqdGkiOiJkMjM3NzA5YzRjNjI0NDI4YTc3YzM5MDFhNDZiYWY0ZiIsImV4dF9hdHRyIjp7ImVuaGFuY2VyIjoiWFNVQUEiLCJzdWJhY2NvdW50aWQiOiIxMjUyNzlhZC0yM2U2LTQ4ZTUtODVhOS01NDM5NTk0YjQ2NjkiLCJ6ZG4iOiJkZXZlbG9wbWVudC1hYXJpbmkiLCJzZXJ2aWNlaW5zdGFuY2VpZCI6IjRjODEwNDRlLTE0M2ItNDE3Ni05OTEzLTQ4Nzk1YWVmODUxYyJ9LCJzdWIiOiJzYi00YzgxMDQ0ZS0xNDNiLTQxNzYtOTkxMy00ODc5NWFlZjg1MWMhYjE1MzA3NHxzZG0tZGktU0RNX0RJX1BST0QtcHJvZCFiNDEwNjQiLCJhdXRob3JpdGllcyI6WyJ1YWEucmVzb3VyY2UiLCJzZG0tZGktU0RNX0RJX1BST0QtcHJvZCFiNDEwNjQuc2RtYnVzaW5lc3NhZG1pbiIsInNkbS1kaS1TRE1fRElfUFJPRC1wcm9kIWI0MTA2NC5zZG1hZG1pbiIsInNkbS1kaS1TRE1fRElfUFJPRC1wcm9kIWI0MTA2NC5zZG11c2VyIiwic2RtLWRpLVNETV9ESV9QUk9ELXByb2QhYjQxMDY0LnNkbW1pZ3JhdGlvbmFkbWluIl0sInNjb3BlIjpbInVhYS5yZXNvdXJjZSIsInNkbS1kaS1TRE1fRElfUFJPRC1wcm9kIWI0MTA2NC5zZG1idXNpbmVzc2FkbWluIiwic2RtLWRpLVNETV9ESV9QUk9ELXByb2QhYjQxMDY0LnNkbXVzZXIiLCJzZG0tZGktU0RNX0RJX1BST0QtcHJvZCFiNDEwNjQuc2RtbWlncmF0aW9uYWRtaW4iLCJzZG0tZGktU0RNX0RJX1BST0QtcHJvZCFiNDEwNjQuc2RtYWRtaW4iXSwiY2xpZW50X2lkIjoic2ItNGM4MTA0NGUtMTQzYi00MTc2LTk5MTMtNDg3OTVhZWY4NTFjIWIxNTMwNzR8c2RtLWRpLVNETV9ESV9QUk9ELXByb2QhYjQxMDY0IiwiY2lkIjoic2ItNGM4MTA0NGUtMTQzYi00MTc2LTk5MTMtNDg3OTVhZWY4NTFjIWIxNTMwNzR8c2RtLWRpLVNETV9ESV9QUk9ELXByb2QhYjQxMDY0IiwiYXpwIjoic2ItNGM4MTA0NGUtMTQzYi00MTc2LTk5MTMtNDg3OTVhZWY4NTFjIWIxNTMwNzR8c2RtLWRpLVNETV9ESV9QUk9ELXByb2QhYjQxMDY0IiwiZ3JhbnRfdHlwZSI6ImNsaWVudF9jcmVkZW50aWFscyIsInJldl9zaWciOiJhMmMxZmZlNyIsImlhdCI6MTcxNDk3MDcyNiwiZXhwIjoxNzE1MDEzOTI2LCJpc3MiOiJodHRwczovL2RldmVsb3BtZW50LWFhcmluaS5hdXRoZW50aWNhdGlvbi5ldTEwLmhhbmEub25kZW1hbmQuY29tL29hdXRoL3Rva2VuIiwiemlkIjoiMTI1Mjc5YWQtMjNlNi00OGU1LTg1YTktNTQzOTU5NGI0NjY5IiwiYXVkIjpbInNiLTRjODEwNDRlLTE0M2ItNDE3Ni05OTEzLTQ4Nzk1YWVmODUxYyFiMTUzMDc0fHNkbS1kaS1TRE1fRElfUFJPRC1wcm9kIWI0MTA2NCIsInVhYSIsInNkbS1kaS1TRE1fRElfUFJPRC1wcm9kIWI0MTA2NCJdfQ.YmnznroYufJrLaDdWiusiBbaH4nFxanqD3XcK1vR-ZbaGDy9a9-JIAMfG5GBuOByb3-0ofZUJNCF5VfdxeU84hA6EWni4N3vO3g3Fc26VWSkUPMPw9IENVHKBd-pYe4EvH0euWFClkq6-hJ0zmhr7wrLcvCCpE6KvfjwsfVJYD9Cr0C6zNsd_V39I67Z06Px4OixwKblhXt56t6X5U7yYlE3nQXbj7UtpW9YRhb0JAuAC274ax9DbW-g6LmMQ43YKeveCi0nEYrVnWDcE5r8BLZxn2N3uIeoyer5DQ-rFpCT1giA8bR8iYHHNmkGtSuze97n4qbPyNNbwv7aRsl-_g', 
+    'Cookie': 'JSESSIONID=C37555BD067502FABE57F914FB00EDB4; __VCAP_ID__=6d33da60-2799-457a-5ad1-8a61', 
+    ...data.getHeaders()
+  },
+  data : data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});

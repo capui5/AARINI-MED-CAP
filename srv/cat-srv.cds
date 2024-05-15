@@ -102,9 +102,51 @@ service MyService {
             REVIEW                  : String(100);
             STATUS                  : String;
             APPROVED_AMOUNT         : Decimal(15, 2);
-            ATTACHMENTS             : LargeBinary;
+            ATTACHMENT1             : Composition of many DMS_ATT
+                                          on $self = ATTACHMENT1.ATTACHMENT;
+
 
     }
+    //     entity DMS_ATT {
+    //         key FILE_ID           : UUID;
+    //         CLAIM_ID              : Integer;
+    //         UPLOADED_DATE     : DateTime;
+    //         UPLOADED_BY       : String;
+    //         FILE_URL          : String(200) @title: 'File URL';
+
+    //         @Core.MediaType                  : MEDIA_TYPE
+    //         @Core.ContentDisposition.Filename: FILE_NAME
+    //         FILE_CONTENT      : LargeBinary @title: 'File Content';
+
+    //         @Core.IsMediaType                : true
+    //         //@mandatory
+    //         MEDIA_TYPE        : String;
+
+    //         //@mandatory
+    //         FILE_NAME         : String(100) @title: 'File Name';
+    //         FILE_NAME_DMS     : String(100);
+    //         BUSINESS_DOC_TYPE : String(50);
+    //         ATTACHMENT        : Association to CLAIM_DETAILS;
+    // }
+    entity DMS_ATT {
+        key FILE_ID           : UUID;
+            CLAIM_ID          : Integer;
+            UPLOADED_DATE     : DateTime;
+            UPLOADED_BY       : String;
+            FILE_URL          : String(200) @title: 'File URL';
+
+            // @Core.MediaType                  : MEDIA_TYPE
+            @Core.ContentDisposition.Filename: FILE_NAME
+            FILE_CONTENT      : LargeBinary @title: 'File Content';
+
+            @Core.IsMediaType                : true
+            MEDIA_TYPE        : String;
+            FILE_NAME         : String(100) @title: 'File Name';
+            FILE_NAME_DMS     : String(100);
+            BUSINESS_DOC_TYPE : String(50);
+            ATTACHMENT        : Association to CLAIM_DETAILS;
+    }
+
 
     entity ZHRMEDICLAIM {
 
@@ -172,6 +214,7 @@ service MyService {
     //                     approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
 
 
-    function createFolder(folderName:String)                                   returns String;
+    function createFolder(folderName : String)                                                                                                                                     returns String;
+    function createFile(item : String, folder : String)                                                                                                                            returns String;
 
 }

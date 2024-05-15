@@ -29,6 +29,7 @@ entity Managecalims {
 @cds.persistence.calcview
 @cds.persistence.exists
 entity ClaimDetails {
+    ID:UUID;
     CLAIM_ID                : Integer;
     PERSON_NUMBER           : Integer;
     CLAIM_TYPE              : String(40);
