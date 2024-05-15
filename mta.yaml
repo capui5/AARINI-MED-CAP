@@ -3,46 +3,52 @@ ID: AARINI_MED_CAP
 description: A simple CAP project.
 version: 1.0.0
 modules:
-- name: AARINI_MED_CAP-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: AARINI_MED_CAP-db
-  - name: AARINI_MED_CAP_XSUAA
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-  build-parameters:
-    builder: npm
-- name: AARINI_MED_CAP-db-deployer
-  type: hdb
-  path: gen/db
-  requires:
-  - name: AARINI_MED_CAP-db
-    properties:
-      TARGET_CONTAINER: ~{hdi-service-name}
-  parameters:
-    buildpack: nodejs_buildpack
+  - name: AARINI_MED_CAP-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: AARINI_MED_CAP-db
+      - name: AARINI_MED_CAP_XSUAA
+      - name: AARINI_MED_CAP_DEST
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+  - name: AARINI_MED_CAP-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: AARINI_MED_CAP-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-service-name}
+    parameters:
+      buildpack: nodejs_buildpack
 
 resources:
+  - name: AARINI_MED_CAP-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      config:
+        makeUniqueName: false
+        schema: AARINI_MED_CAP
+      service-name: AARINI_MED_CAP_HDI
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-service-name: ${service-name}
 
-- name: AARINI_MED_CAP-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    config:
-      makeUniqueName: false
-      schema: AARINI_MED_CAP
-    service-name: AARINI_MED_CAP_HDI
-  properties:
-    hdi-service-name: ${service-name}
-
-- name: AARINI_MED_CAP_XSUAA
-  type: org.cloudfoundry.existing-service
-  parameters:
-    path: ./xs-security.json
-    service: xsuaa
-    service-plan: application
-
+  - name: AARINI_MED_CAP_XSUAA
+    type: org.cloudfoundry.existing-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+  - name: AARINI_MED_CAP_DEST
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite

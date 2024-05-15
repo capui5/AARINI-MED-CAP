@@ -152,25 +152,26 @@ service MyService {
                         bill_no : String,
                         bill_amount : Integer,
                         discount : Integer,
-                        approved_amount : Decimal(15, 2))        
-                        returns Boolean;
+                        approved_amount : Decimal(15, 2))                                                                                                                          returns Boolean;
 
-// function submitData(claim_id : Integer,
-//                     person_number : Integer,
-//                     claim_type : String,
-//                     claim_start_date : Date,
-//                     claim_end_date : Date,
-//                     treatment_for : String,
-//                     treatment_for_if_others : String,
-//                     select_dependents : String,
-//                     requested_amount : Integer,
-//                     consultancy_category : String,
-//                     medical_store : String,
-//                     bill_date : Date,
-//                     bill_no : String,
-//                     bill_amount : Integer,
-//                     discount : Integer,
-//                     approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
+    // function submitData(claim_id : Integer,
+    //                     person_number : Integer,
+    //                     claim_type : String,
+    //                     claim_start_date : Date,
+    //                     claim_end_date : Date,
+    //                     treatment_for : String,
+    //                     treatment_for_if_others : String,
+    //                     select_dependents : String,
+    //                     requested_amount : Integer,
+    //                     consultancy_category : String,
+    //                     medical_store : String,
+    //                     bill_date : Date,
+    //                     bill_no : String,
+    //                     bill_amount : Integer,
+    //                     discount : Integer,
+    //                     approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
 
+
+    function createFolder(folderName:String)                                   returns String;
 
 }

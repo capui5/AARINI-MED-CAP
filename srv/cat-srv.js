@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-// const axios = require('axios');
+const axios = require('axios');
 const FormData = require('form-data');
 
 module.exports = cds.service.impl(srv => {
@@ -206,15 +206,46 @@ module.exports = cds.service.impl(srv => {
     })
 
     //Create Folder using DMS
-    async function createFolder(req, folderName) {
+    // srv.on('createFolder', async (req) => {
+    //     const { folderName } = req.data;
+    //     console.log("createFolder invoked");
+
+    //     const cmisService = await cds.connect.to("DMS");
+    //     try {
+    //         console.log("Creating folder:", folderName);
+    //         const data =
+    //             `cmisaction=createFolder` +
+    //             `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
+    //             `&propertyId[0]=cmis:name` +
+    //             `&propertyValue[0]=${folderName}` +
+    //             `&propertyId[1]=cmis:objectTypeId` +
+    //             `&propertyValue[1]=cmis:folder` +
+    //             `&succinct=true`;
+
+    //         const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+
+    //         // Send the POST request to create the folder
+    //         await cmisService.send({
+    //             method: "POST", path: "/MEDICAL CLAIM", data, headers
+    //         });
+
+    //         // Return a successful response
+    //         return { success: true };
+    //     }
+    //     catch (error) {
+    //         console.log(error);
+    //         // Return an error response
+    //         return { error: error.message };
+    //     }
+    // });
+
+    srv.on('createFolder', async (req) => {
+        const { folderName } = req.data;
         console.log("createFolder invoked");
-        console.log(folderName)
-
-        const cmisService = await cds.connect.to("DMS_TDD");
+    
+        const cmisService = await cds.connect.to("DMS");
         try {
-
-            console.log("Folder " + folderName + " is not available in the DMS");
-
+            console.log("Creating folder:", folderName);
             const data =
                 `cmisaction=createFolder` +
                 `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
@@ -223,22 +254,24 @@ module.exports = cds.service.impl(srv => {
                 `&propertyId[1]=cmis:objectTypeId` +
                 `&propertyValue[1]=cmis:folder` +
                 `&succinct=true`;
-
+    
             const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
-            await cmisService.send({ method: "POST", path: "/", data, 
-         });
-            return true;
+    
+            // Send the POST request to create the folder
+            await cmisService.send({
+                method: "POST", path: "/MEDICAL CLAIM", data, headers
+            });
+    
+            // Return a successful response
+            return { success: true };
         }
         catch (error) {
-            console.log("Error while creating folder");
-            return error;
+            console.log(error);
+            // Return an error response
+            return { error: error.message };
         }
-
-
-    }
+    });
+    
 
 });
-
-
 
