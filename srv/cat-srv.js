@@ -209,30 +209,84 @@ module.exports = cds.service.impl(srv => {
 
 
     // Create Folder using DMS
-    srv.on('createFolder', async (req) => {
-        const { folderName } = req.data;
-        console.log("Invoked createFolder with folderName:", folderName);
+    // async function createFolder(POLICYNO) {
+    //     if (!POLICYNO) {
+    //         throw new Error("Policy number is not provided.");
+    //     }
+
+    //     try {
+    //         const folderNameResult = await cds.run(
+    //             SELECT.one
+    //                 .from('MYSERVICE_ZHRMED_POLICY')
+    //                 .where({ POLICYNO: POLICYNO })
+    //         );
+
+    //         if (!folderNameResult) {
+    //             throw new Error(`Policy number ${POLICYNO} not found.`);
+    //         }
+
+    //         const folder = folderNameResult.POLICYNO;
+
+    //         console.log("Invoked createFolder with folderName:", folder);
+
+    //         const cmisService = await cds.connect.to("DMS");
+
+    //         try {
+    //             const getResponse = await cmisService.get(`/MEDICAL CLAIM/TEST REPORT/${folder}`);
+    //             console.log("get call");
+
+    //             if (getResponse) {
+    //                 console.log("Folder already exists:", folder);
+    //                 return { success: true, folderExists: true };
+    //             }
+    //         } catch (err) {
+    //             if (err.statusCode !== 404) {
+    //                 throw new Error(`Error checking folder existence: ${err.message}`);
+    //             }
+    //         }
+
+    //         console.log("Folder does not exist. Creating folder:", folder);
+
+    //         const data =
+    //             `cmisaction=createFolder` +
+    //             `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
+    //             `&propertyId[0]=cmis:name` +
+    //             `&propertyValue[0]=${folder}` +
+    //             `&propertyId[1]=cmis:objectTypeId` +
+    //             `&propertyValue[1]=cmis:folder` +
+    //             `&succinct=true`;
+
+    //         const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+
+    //         await cmisService.send({
+    //             method: "POST", path: "/MEDICAL CLAIM/TEST REPORT/", data, headers
+    //         });
+
+    //         console.log("Folder created successfully:", folder);
+
+    //         return { success: true };
+    //     } catch (error) {
+    //         console.error("Error in creating folder:", error);
+    //         throw new Error(`Error in creating folder: ${error.message}`);
+    //     }
+    // }
+
+    async function createFolderandValidateT(req, folderName) {
+        console.log("createFolderandValidateT invoked");
 
         const cmisService = await cds.connect.to("DMS");
-
         try {
-            const getResponse = await cmisService.get(`/MEDICAL CLAIM/` + folderName);
-            console.log("get call")
+            const getResponse = await cmisService.get(`/MEDICAL CLAIM/TEST REPORT/` + folderName);
+            console.log("getResponse");
             if (getResponse) {
-                console.log("Folder already exists:", folderName);
-                return { success: true, folderExists: true };
+                return true;
             }
-            console.log("Creating folder:", folderName);
-
-            // Return a successful response
-            return { success: true };
-        }
-        catch (error) {
-            console.log("Folder", folderName, "is not available in DMS. Creating...");
+        } catch (error) {
+            console.log("Folder " + folderName + " is not available in the DMS");
 
             const data =
                 `cmisaction=createFolder` +
-                `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
+                `&objectId=3eLP4Nl9pNs6PEvGbqc_qD11NdTXcDMLp3tyhNN0Soc` +
                 `&propertyId[0]=cmis:name` +
                 `&propertyValue[0]=${folderName}` +
                 `&propertyId[1]=cmis:objectTypeId` +
@@ -240,30 +294,152 @@ module.exports = cds.service.impl(srv => {
                 `&succinct=true`;
 
             const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
-            // Send the POST request to create the folder
             try {
-                await cmisService.send({
-                    method: "POST", path: "/MEDICAL CLAIM", data, headers
-                });
-                console.log("Folder created successfully:", folderName);
-
-                return { success: true };
+                await cmisService.send({ method: "POST", path: "/", data, headers });
+                return true;
             }
-            catch (e) {
-                console.log("ERROR in creating folder:", e);
-                return { error: `Error in creating folder: ${e.message}` };
+            catch (error) {
+                return error;
             }
         }
-    });
 
-    srv.before("CREATE", "DMS_ATT", async (req) => {
+    }
+
+
+    async function createFolder(POLICYNO) {
+        if (!POLICYNO) {
+            throw new Error("Policy number is not provided.");
+        }
+
+        // try {
+        console.log("I was here" + POLICYNO)
+        // const folderNameResult = await SELECT.one
+        //         .from("MYSERVICE_ZHRMED_POLICY")
+        //         .where({ POLICYNO: POLICYNO });
+
+        // console.log("Im here too")
+        // if (!folderNameResult) {
+        //     throw new Error(`Policy number ${POLICYNO} not found.`);
+        // }
+
+        // try {
+        // const folder = folderNameResult.POLICYNO; 
+        // console.log("Invoked createFolder with folderName:", folder);
+
+        const cmisService = await cds.connect.to("DMS");
+
+        // try {
+        const getResponse = await cmisService.get(`/MEDICAL CLAIM/TEST REPORT/${POLICYNO}`);
+        console.log("get call");
+
+        if (getResponse) {
+            console.log("Folder already exists:", folder);
+            return { success: true, folderExists: true };
+        }
+        // } catch (err) {
+        // if (err.statusCode !== 404) {
+        //     throw new Error(`Error checking folder existence: ${err.message}`);
+        // }
+        // }
+
+        console.log("Folder does not exist. Creating folder:", folder);
+
+        const data =
+            `cmisaction=createFolder` +
+            // `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
+            `&objectId= 3eLP4Nl9pNs6PEvGbqc_qD11NdTXcDMLp3tyhNN0Soc` +
+            `&propertyId[0]=cmis:name` +
+            `&propertyValue[0]=${folder}` +
+            `&propertyId[1]=cmis:objectTypeId` +
+            `&propertyValue[1]=cmis:folder` +
+            `&succinct=true`;
+
+        const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+
+        await cmisService.send({
+            method: "POST", path: "/MEDICAL CLAIM/TEST REPORT/", data, headers
+        });
+
+        console.log("Folder created successfully:", folder);
+
+        return { success: true };
+        // } catch (error) {
+        //     console.error("Error in creating folder:", error);
+        //     throw new Error(`Error in creating folder: ${error.message}`);
+        // }
+        // } catch (error) {
+        //     console.error("Error in fetching folder name:", error);
+        //     throw new Error(`Error in fetching folder name: ${error.message}`);
+        // }
+    }
+
+
+
+    async function uploadFile(req, binaryContent, filename) {
+        const cmisService = await cds.connect.to("DMS");
+        let contentBuffer = Buffer.from(binaryContent, "base64");
+        // console.log(req.data.MEDIA_TYPE);
+        // console.log(req.data.POLICYNO)
+        // console.log(req.data.filename)
+        // console.log(form)
+
+        // FormData
+        var form = new FormData();
+        form.append("cmisaction", "createDocument");
+        form.append("propertyId[1]", "cmis:name");
+        form.append("propertyValue[0]", "cmis:document");
+        form.append("propertyId[0]", "cmis:objectTypeId");
+
+
+        const CRLF = "\r\n";
+        const options = {
+            header:
+                "--" +
+                form.getBoundary() +
+                CRLF +
+                `Content-Disposition: form-data; name="propertyValue[1]"` +
+                CRLF +
+                `Content-Type: text/plain;charset=UTF-8` +
+                CRLF +
+                CRLF,
+        };
+        form.append("propertyValue[1]", filename, options);
+        const fileOptions = {
+            header:
+                "--" +
+                form.getBoundary() +
+                CRLF +
+                `Content-Disposition: form-data; name="file"; filename*=UTF-8''${filename}` +
+                CRLF +
+                `Content-Type: ${req.data.MEDIA_TYPE}` +
+                CRLF +
+                CRLF,
+        };
+        form.append("dataFile", contentBuffer, fileOptions);
+        const data = form.getBuffer();
+        const headers = form.getHeaders();
 
         try {
-            if (
-                req.data.FILE_NAME === "" ||
-                req.data.FILE_NAME === undefined
-            ) {
+            const response = await cmisService.send({
+                method: "POST",
+                path: `/MEDICAL CLAIM/TEST REPORT/${req.data.POLICYNO}`,
+                data,
+                headers,
+            });
+            console.log(response);
+
+            req.data.FILE_CONTENT = null;
+        } catch (error) {
+            req.error("Error occurred during file upload:", error);
+        }
+    }
+
+
+    srv.before("CREATE", "DMS_ATT", async (req) => {
+        try {
+            console.log("Request Data:", req.data);
+
+            if (!req.data.FILE_NAME) {
                 return req.error({
                     code: "500",
                     message: "File name is mandatory",
@@ -273,127 +449,22 @@ module.exports = cds.service.impl(srv => {
 
             req.data.FILE_NAME_DMS = req.data.FILE_NAME + new Date().toISOString();
 
-            const folder = await SELECT.one.from('UTIL_UTIL_CONSTANT').where({ UTIL_CONSTANT_ID: 'RFS_DMS_FOLDER_ID' });
-
-            await createFolder(req, req.data.ATTACHMENT_REQ_ID, folder.UTIL_CONSTANT_VALUE, 'DMS');
+            console.log("Before uploading folder")
+            // Call createFolder function with POLICYNO
+            await createFolderandValidateT(req, req.data.POLICYNO);
+            console.log("console check");
 
             // Upload file in the folder
-
             await uploadFile(req, req.data.FILE_CONTENT, req.data.FILE_NAME_DMS);
 
-
-
         } catch (error) {
-            console.log(error);
+            console.error("Error in DMS_ATT before create handler:", error);
             req.error({
                 code: 500,
-                message: "Error in DMS_ATT before create handler",
+                message: `Error in DMS_ATT before create handler: ${error.message}`,
                 status: 418,
-            })
-
+            });
         }
-
-        async function uploadFile(req, binaryContent, filename) {
-            const cmisService = await cds.connect.to("DMS");
-            let contentBuffer = Buffer.from(binaryContent, "base64");
-
-            // FormData
-
-            var form = new FormData();
-
-            form.append("cmisaction", "createDocument");
-
-            form.append("propertyId[1]", "cmis:name");
-
-            form.append("propertyValue[0]", "cmis:document");
-
-            form.append("propertyId[0]", "cmis:objectTypeId");
-
-
-            const CRLF = "\r\n";
-
-            const options = {
-
-                header:
-
-                    "--" +
-
-                    form.getBoundary() +
-
-                    CRLF +
-
-                    `Content-Disposition: form-data; name="propertyValue[1]"` +
-
-                    CRLF +
-
-                    `Content-Type: text/plain;charset=UTF-8` +
-
-                    CRLF +
-
-                    CRLF,
-
-            };
-
-            form.append("propertyValue[1]", filename, options);
-
-            const fileOptions = {
-
-                header:
-
-                    "--" +
-
-                    form.getBoundary() +
-
-                    CRLF +
-
-                    `Content-Disposition: form-data; name="file"; filename*=UTF-8''${filename}` +
-
-                    CRLF +
-
-                    `Content-Type: ${req.data.MEDIA_TYPE}` +
-
-                    CRLF +
-
-                    CRLF,
-
-            };
-
-            form.append("dataFile", contentBuffer, fileOptions);
-
-            const data = form.getBuffer();
-
-            const headers = form.getHeaders();
-
-            // CAP
-
-
-            try {
-
-                const response = await cmisService.send({
-
-                    method: "POST",
-
-                    path: `/MEDICAL CLAIM/${folderName}/${req.data.ATTACHMENT_REQ_ID}`,
-
-                    data,
-
-                    headers,
-
-                });
-
-                // console.log(response);
-
-                req.data.FILE_CONTENT = null;
-                req.data.FILE_NAME_DMS = filename;
-
-            } catch (error) {
-
-                req.error("Error occurred during file upload:", error);
-
-            }
-
-        }
-
     });
 
 

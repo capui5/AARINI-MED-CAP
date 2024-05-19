@@ -102,8 +102,8 @@ service MyService {
             REVIEW                  : String(100);
             STATUS                  : String;
             APPROVED_AMOUNT         : Decimal(15, 2);
-            ATTACHMENT1             : Composition of many DMS_ATT
-                                          on $self = ATTACHMENT1.ATTACHMENT;
+            // ATTACHMENT1             : Composition of many DMS_ATT
+            //                               on $self = ATTACHMENT1.ATTACHMENT;
 
 
     }
@@ -130,7 +130,6 @@ service MyService {
     // }
     entity DMS_ATT {
         key FILE_ID           : UUID;
-            CLAIM_ID          : Integer;
             UPLOADED_DATE     : DateTime;
             UPLOADED_BY       : String;
             FILE_URL          : String(200) @title: 'File URL';
@@ -144,7 +143,8 @@ service MyService {
             FILE_NAME         : String(100) @title: 'File Name';
             FILE_NAME_DMS     : String(100);
             BUSINESS_DOC_TYPE : String(50);
-            ATTACHMENT        : Association to CLAIM_DETAILS;
+            POLICYNO         : String(40);
+            // ATTACHMENT        : Association to CLAIM_DETAILS;
     }
 
 
@@ -214,7 +214,7 @@ service MyService {
     //                     approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
 
 
-    function createFolder(folderName : String)                                                                                                                                     returns String;
+    function createFolder(ATTACHMENT_ID : String)                                                                                                                                     returns String;
     function createFile(item : String, folder : String)                                                                                                                            returns String;
 
 }
