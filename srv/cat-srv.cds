@@ -102,32 +102,12 @@ service MyService {
             REVIEW                  : String(100);
             STATUS                  : String;
             APPROVED_AMOUNT         : Decimal(15, 2);
-            // ATTACHMENT1             : Composition of many DMS_ATT
-            //                               on $self = ATTACHMENT1.ATTACHMENT;
-
-
+            POLICYNO                : String(40);
+    // DMS_ATT_ASS             : Composition of many DMS_ATT
+    //                               on DMS_ATT_ASS.POLICYNO = POLICYNO;
+    // file:Composition of many ASSETS on file.POLICYNO=POLICYNO;
     }
-    //     entity DMS_ATT {
-    //         key FILE_ID           : UUID;
-    //         CLAIM_ID              : Integer;
-    //         UPLOADED_DATE     : DateTime;
-    //         UPLOADED_BY       : String;
-    //         FILE_URL          : String(200) @title: 'File URL';
 
-    //         @Core.MediaType                  : MEDIA_TYPE
-    //         @Core.ContentDisposition.Filename: FILE_NAME
-    //         FILE_CONTENT      : LargeBinary @title: 'File Content';
-
-    //         @Core.IsMediaType                : true
-    //         //@mandatory
-    //         MEDIA_TYPE        : String;
-
-    //         //@mandatory
-    //         FILE_NAME         : String(100) @title: 'File Name';
-    //         FILE_NAME_DMS     : String(100);
-    //         BUSINESS_DOC_TYPE : String(50);
-    //         ATTACHMENT        : Association to CLAIM_DETAILS;
-    // }
     entity DMS_ATT {
         key FILE_ID           : UUID;
             UPLOADED_DATE     : DateTime;
@@ -143,8 +123,21 @@ service MyService {
             FILE_NAME         : String(100) @title: 'File Name';
             FILE_NAME_DMS     : String(100);
             BUSINESS_DOC_TYPE : String(50);
-            POLICYNO         : String(40);
-            // ATTACHMENT        : Association to CLAIM_DETAILS;
+            POLICYNO          : String(40);
+            CLAIM_DETAIL      : Association to CLAIM_DETAILS
+                                    on CLAIM_DETAIL.POLICYNO = POLICYNO;
+
+    }
+
+    entity ASSETS {
+        key file_id      : UUID;
+            file_name    : String;
+
+            // @Core.MediaType                  : file_type
+            @Core.ContentDisposition.Filename: file_name
+            file_content : LargeBinary;
+            file_type    : String;
+            POLICYNO     : String(40);
     }
 
 
@@ -160,6 +153,7 @@ service MyService {
             STATUS          : String(40);
             APPROVED_AMOUNT : Integer;
     }
+
 
     entity POLICY_DETAILS {
         POLICY_STARTDATE : Timestamp;
@@ -211,10 +205,10 @@ service MyService {
     //                     bill_no : String,
     //                     bill_amount : Integer,
     //                     discount : Integer,
-    //                     approved_amount : Decimal(15, 2))                                                                                                                          returns Integer;
+    //                     approved_amount : Decivmal(15, 2))                                                                                                                          returns Integer;
 
 
-    function createFolder(ATTACHMENT_ID : String)                                                                                                                                     returns String;
+    function createFolder(ATTACHMENT_ID : String)                                                                                                                                  returns String;
     function createFile(item : String, folder : String)                                                                                                                            returns String;
 
 }

@@ -13,6 +13,7 @@ entity ClaimReports {
     APPROVED_AMOUNT   : Integer;
 }
 
+
 @cds.persistence.calcview
 @cds.persistence.exists
 entity Managecalims {
@@ -29,7 +30,7 @@ entity Managecalims {
 @cds.persistence.calcview
 @cds.persistence.exists
 entity ClaimDetails {
-    ID:UUID;
+    ID                      : UUID;
     CLAIM_ID                : Integer;
     PERSON_NUMBER           : Integer;
     CLAIM_TYPE              : String(40);

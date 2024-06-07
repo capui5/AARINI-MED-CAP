@@ -1,42 +1,43 @@
 
+# ###
+# GET http://localhost:4004/odata/v4/my/CLAIM_DETAILS
+# Content-Type: application/json
+
+# {
+#       "CLAIM_ID": 23,
+#       "PERSON_NUMBER": 90,
+#       "CLAIM_TYPE": "(OPD) OUTPATIENT DEPARTMENT",
+#       "CLAIM_START_DATE": "2024-04-14T18:30:00.000Z",
+#       "CLAIM_END_DATE": "2024-04-16T18:30:00.000Z",
+#       "TREATMENT_FOR": "CANCER",
+#       "TREATMENT_FOR_IF_OTHERS": null,
+#       "TREATMENT_TYPE": "AYURVEDIC",
+#       "SELECT_DEPENDENTS": "SELF",
+#       "SUBMITTED_DATE": "2024-04-15",
+#       "DOCTOR_NAME": "sada",
+#       "PATIENT_ID": "123",
+#       "HOSPITAL_LOCATION": "AMRITSAR",
+#       "REQUESTED_AMOUNT": 5000,
+#       "CONSULTANCY_CATEGORY": "ANAESTHETIST FEES",
+#       "MEDICAL_STORE": "APOLLO CLINIC",
+#       "BILL_DATE": "2024-04-15T00:00:00.000Z",
+#       "BILL_NO": "123",
+#       "BILL_AMOUNT": 5000,
+#       "DISCOUNT": 0,
+#       "REVIEW": "",
+#       "STATUS": null,
+#       "APPROVED_AMOUNT": 0
+#     }
+
+# ###
+# GET http://localhost:4004/odata/v4/my/createFolder(policyno='13050034170500000004')
+
+
+
+
+
 ###
-GET http://localhost:4004/odata/v4/my/CLAIM_DETAILS
-Content-Type: application/json
-
-{
-      "CLAIM_ID": 23,
-      "PERSON_NUMBER": 90,
-      "CLAIM_TYPE": "(OPD) OUTPATIENT DEPARTMENT",
-      "CLAIM_START_DATE": "2024-04-14T18:30:00.000Z",
-      "CLAIM_END_DATE": "2024-04-16T18:30:00.000Z",
-      "TREATMENT_FOR": "CANCER",
-      "TREATMENT_FOR_IF_OTHERS": null,
-      "TREATMENT_TYPE": "AYURVEDIC",
-      "SELECT_DEPENDENTS": "SELF",
-      "SUBMITTED_DATE": "2024-04-15",
-      "DOCTOR_NAME": "sada",
-      "PATIENT_ID": "123",
-      "HOSPITAL_LOCATION": "AMRITSAR",
-      "REQUESTED_AMOUNT": 5000,
-      "CONSULTANCY_CATEGORY": "ANAESTHETIST FEES",
-      "MEDICAL_STORE": "APOLLO CLINIC",
-      "BILL_DATE": "2024-04-15T00:00:00.000Z",
-      "BILL_NO": "123",
-      "BILL_AMOUNT": 5000,
-      "DISCOUNT": 0,
-      "REVIEW": "",
-      "STATUS": null,
-      "APPROVED_AMOUNT": 0
-    }
-
-###
-GET http://localhost:4004/odata/v4/my/createFolder(policyno='13050034170500000004')
-
-
-
-
-###
-POST http://localhost:4004/odata/v4/my/DMS_ATT
+POST  http://localhost:4004/odata/v4/my/DMS_ATT
 Content-Type: application/json
 
 {
@@ -44,13 +45,34 @@ Content-Type: application/json
   "UPLOADED_BY": "ASHWIN",
   "FILE_URL": "MEDICAL CLAIM",
   "MEDIA_TYPE": "image/png",
-  "FILE_NAME": "IACUCattachment104.png",
+  "FILE_NAME": "IACUCattachment108.png",
   "FILE_CONTENT": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTN71OajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYI",
-  "FILE_NAME_DMS": "IACUCattachment104.png",
+  "FILE_NAME_DMS": "IACUCattachment108.png",
   "BUSINESS_DOC_TYPE": "Test report",
   "POLICYNO":"13050034170500000004"
 }
 
+###
+GET  http://localhost:4004/odata/v4/my/DMS_ATT(04446c62-6bfb-40c3-ae90-203759cabbf3)/FILE_CONTENT
+
+###
+POST  http://localhost:4004/odata/v4/my/ASSETS
+Content-Type: application/json
+
+{
+  "file_name"    : "IACUCattachment107.png",
+  "file_content" : "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTN71OajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYI",
+  "file_type"    : "image/png",
+  "POLICYNO"     : "13050034170500000004"
+}
+###
+GET http://localhost:4004/odata/v4/my/ASSETS(facb9a3e-1c36-4703-a1f1-5bd820b8722d)/file_content
+
+###
+GET  http://localhost:4004/odata/v4/my/DMS_ATT(04446c62-6bfb-40c3-ae90-203759cabbf3)/FILE_CONTENT
+
+###
+DELETE  http://localhost:33281/odata/v4/my/DMS_ATT(04446c62-6bfb-40c3-ae90-203759cabbf3)
 
 
 

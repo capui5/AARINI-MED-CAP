@@ -1,9 +1,14 @@
-const cds = require('@sap/cds');
+
+const cds = require("@sap/cds");
 const axios = require('axios');
 const FormData = require('form-data');
+const { executeHttpRequest, readPropertyWithWarn, contains, retrieveJwt } = require("@sap-cloud-sdk/core");
+const { Readable } = require('stream');
 // const cmisService = cds.connect.to("DMS");
 
+
 module.exports = cds.service.impl(srv => {
+
     srv.on('validations', async (req) => {
         const { startDate, endDate, requestedAmount, category } = req.data;
 
@@ -124,53 +129,6 @@ module.exports = cds.service.impl(srv => {
         }
     });
 
-    //Submit to HANA DB
-
-    // srv.on('submitData',async(req)=>{
-    //     const{claim_id,person_number,claim_type,claim_start_date,claim_end_date,treatment_for,
-    //         treatment_for_if_others,select_dependents,requested_amount,consultancy_category,
-    //         medical_store,bill_date,bill_no,bill_amount,discount,approved_amount}=req.data
-
-    //         try {
-    //             // Define a function to insert data into HANA database
-    //             async function submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
-    //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
-    //                 medical_store, bill_date, bill_no, bill_amount, discount, approved_amount) {
-
-    //                 // Use CAP CDS (Core Data Services) to run an INSERT statement
-    //                 await srv.tx(req).run(INSERT.into('MYSERVICE_CLAIM_DETAILS').entries({
-    //                     CLAIM_ID: claim_id,
-    //                     PERSON_NUMBER: person_number,
-    //                     CLAIM_TYPE: claim_type,
-    //                     CLAIM_START_DATE: claim_start_date,
-    //                     CLAIM_END_DATE: claim_end_date,
-    //                     TREATMENT_FOR: treatment_for,
-    //                     TREATMENT_FOR_IF_OTHERS: treatment_for_if_others,
-    //                     SELECT_DEPENDENTS: select_dependents,
-    //                     REQUESTED_AMOUNT: requested_amount,
-    //                     CONSULTANCY_CATEGORY: consultancy_category,
-    //                     MEDICAL_STORE: medical_store,
-    //                     BILL_DATE: bill_date,
-    //                     BILL_NO: bill_no,
-    //                     BILL_AMOUNT: bill_amount,
-    //                     DISCOUNT: discount,
-    //                     APPROVED_AMOUNT: approved_amount
-    //                 }));
-
-    //                 console.log('Data inserted successfully.');
-    //             }
-
-    //             // Call the submit function with the provided data
-    //             await submit(claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
-    //                 treatment_for_if_others, select_dependents, requested_amount, consultancy_category,
-    //                 medical_store, bill_date, bill_no, bill_amount, discount, approved_amount);
-    //         } catch (error) {
-    //             console.error('Error inserting data:', error);
-    //         }
-
-
-    // })
-
 
     srv.on('submitData', async (req) => {
         const { claim_id, person_number, claim_type, claim_start_date, claim_end_date, treatment_for,
@@ -207,70 +165,6 @@ module.exports = cds.service.impl(srv => {
     })
 
 
-
-    // Create Folder using DMS
-    // async function createFolder(POLICYNO) {
-    //     if (!POLICYNO) {
-    //         throw new Error("Policy number is not provided.");
-    //     }
-
-    //     try {
-    //         const folderNameResult = await cds.run(
-    //             SELECT.one
-    //                 .from('MYSERVICE_ZHRMED_POLICY')
-    //                 .where({ POLICYNO: POLICYNO })
-    //         );
-
-    //         if (!folderNameResult) {
-    //             throw new Error(`Policy number ${POLICYNO} not found.`);
-    //         }
-
-    //         const folder = folderNameResult.POLICYNO;
-
-    //         console.log("Invoked createFolder with folderName:", folder);
-
-    //         const cmisService = await cds.connect.to("DMS");
-
-    //         try {
-    //             const getResponse = await cmisService.get(`/MEDICAL CLAIM/TEST REPORT/${folder}`);
-    //             console.log("get call");
-
-    //             if (getResponse) {
-    //                 console.log("Folder already exists:", folder);
-    //                 return { success: true, folderExists: true };
-    //             }
-    //         } catch (err) {
-    //             if (err.statusCode !== 404) {
-    //                 throw new Error(`Error checking folder existence: ${err.message}`);
-    //             }
-    //         }
-
-    //         console.log("Folder does not exist. Creating folder:", folder);
-
-    //         const data =
-    //             `cmisaction=createFolder` +
-    //             `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
-    //             `&propertyId[0]=cmis:name` +
-    //             `&propertyValue[0]=${folder}` +
-    //             `&propertyId[1]=cmis:objectTypeId` +
-    //             `&propertyValue[1]=cmis:folder` +
-    //             `&succinct=true`;
-
-    //         const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
-    //         await cmisService.send({
-    //             method: "POST", path: "/MEDICAL CLAIM/TEST REPORT/", data, headers
-    //         });
-
-    //         console.log("Folder created successfully:", folder);
-
-    //         return { success: true };
-    //     } catch (error) {
-    //         console.error("Error in creating folder:", error);
-    //         throw new Error(`Error in creating folder: ${error.message}`);
-    //     }
-    // }
-
     async function createFolderandValidateT(req, folderName) {
         console.log("createFolderandValidateT invoked");
 
@@ -306,82 +200,10 @@ module.exports = cds.service.impl(srv => {
     }
 
 
-    async function createFolder(POLICYNO) {
-        if (!POLICYNO) {
-            throw new Error("Policy number is not provided.");
-        }
-
-        // try {
-        console.log("I was here" + POLICYNO)
-        // const folderNameResult = await SELECT.one
-        //         .from("MYSERVICE_ZHRMED_POLICY")
-        //         .where({ POLICYNO: POLICYNO });
-
-        // console.log("Im here too")
-        // if (!folderNameResult) {
-        //     throw new Error(`Policy number ${POLICYNO} not found.`);
-        // }
-
-        // try {
-        // const folder = folderNameResult.POLICYNO; 
-        // console.log("Invoked createFolder with folderName:", folder);
-
-        const cmisService = await cds.connect.to("DMS");
-
-        // try {
-        const getResponse = await cmisService.get(`/MEDICAL CLAIM/TEST REPORT/${POLICYNO}`);
-        console.log("get call");
-
-        if (getResponse) {
-            console.log("Folder already exists:", folder);
-            return { success: true, folderExists: true };
-        }
-        // } catch (err) {
-        // if (err.statusCode !== 404) {
-        //     throw new Error(`Error checking folder existence: ${err.message}`);
-        // }
-        // }
-
-        console.log("Folder does not exist. Creating folder:", folder);
-
-        const data =
-            `cmisaction=createFolder` +
-            // `&objectId=e_r_JZ_Y0kwekUVi-f86GJVZ7XcifhhqmkUHFazZW0s` +
-            `&objectId= 3eLP4Nl9pNs6PEvGbqc_qD11NdTXcDMLp3tyhNN0Soc` +
-            `&propertyId[0]=cmis:name` +
-            `&propertyValue[0]=${folder}` +
-            `&propertyId[1]=cmis:objectTypeId` +
-            `&propertyValue[1]=cmis:folder` +
-            `&succinct=true`;
-
-        const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-
-        await cmisService.send({
-            method: "POST", path: "/MEDICAL CLAIM/TEST REPORT/", data, headers
-        });
-
-        console.log("Folder created successfully:", folder);
-
-        return { success: true };
-        // } catch (error) {
-        //     console.error("Error in creating folder:", error);
-        //     throw new Error(`Error in creating folder: ${error.message}`);
-        // }
-        // } catch (error) {
-        //     console.error("Error in fetching folder name:", error);
-        //     throw new Error(`Error in fetching folder name: ${error.message}`);
-        // }
-    }
-
-
-
     async function uploadFile(req, binaryContent, filename) {
         const cmisService = await cds.connect.to("DMS");
         let contentBuffer = Buffer.from(binaryContent, "base64");
-        // console.log(req.data.MEDIA_TYPE);
-        // console.log(req.data.POLICYNO)
-        // console.log(req.data.filename)
-        // console.log(form)
+
 
         // FormData
         var form = new FormData();
@@ -448,8 +270,8 @@ module.exports = cds.service.impl(srv => {
             }
 
             req.data.FILE_NAME_DMS = req.data.FILE_NAME + new Date().toISOString();
-
             console.log("Before uploading folder")
+
             // Call createFolder function with POLICYNO
             await createFolderandValidateT(req, req.data.POLICYNO);
             console.log("console check");
@@ -468,5 +290,170 @@ module.exports = cds.service.impl(srv => {
     });
 
 
-});
 
+
+
+    srv.on("READ", "DMS_ATT", async (req, next) => {
+        try {
+            const url = req._.req.path;
+            console.log("url", url);
+
+            if (url.includes("FILE_CONTENT")) {
+                const cmisService = await cds.connect.to("DMS");
+                console.log("CMIS Service ", cmisService);
+                const documentId = req.data.FILE_ID;
+                const document = await cds.run(SELECT.one.from("MYSERVICE_DMS_ATT").where({ FILE_ID: documentId }));
+                console.log("document", document);
+
+                if (!document) {
+                    throw new Error(`Document with FILE_ID ${documentId} not found`);
+                }
+
+                const fileUrl = `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${encodeURIComponent(document.FILE_NAME_DMS)}?cmisselector=content`;
+                console.log("Content URL:", fileUrl);
+
+                const getResponse = await executeHttpRequest(
+                    getDestination(req, cds.env.requires.DMS.credentials.destination),
+                    {
+                        url: fileUrl,
+                        method: "GET",
+                        responseType: "arraybuffer",
+                    }
+                );
+                console.log("getResponse", getResponse);
+
+                req._.odataRes.setHeader("Content-Type", `${document.MEDIA_TYPE}`);
+                req._.odataRes.setHeader("Content-Disposition", `attachment; filename="${document.FILE_NAME}"`);
+
+                // Send the response as a stream
+                req._.odataRes.end(Buffer.from(getResponse.data));
+
+            } else {
+                return next(); // Delegate to next/default handlers
+            }
+        } catch (error) {
+            console.error("Error occurred:", error);
+            req._.odataRes.status(500).send({
+                error: {
+                    code: "500",
+                    message: error.message || "An internal error occurred",
+                }
+            });
+        }
+    });
+
+    function getDestination(req, destinationName) {
+        const destination = {
+            destinationName: destinationName,
+        };
+
+        const jwt = retrieveJwt(req);
+        if (jwt && jwt !== "") {
+            destination.jwt = jwt;
+        } else {
+            console.warn("JWT is missing or invalid");
+        }
+
+        console.log("Destination configuration:", destination);
+        return destination;
+    }
+
+    function retrieveJwt(req) {
+        // Implement the logic to retrieve the JWT from the request
+        // For example, from headers or session
+        return req.headers.authorization || "";
+    }
+
+
+    //CREATE FILE TO HANA DB//
+    srv.before('CREATE', "ASSETS", async (req) => {
+        console.log("before create triggered");
+
+        // Ensure req.data is properly structured
+        const { file_content, file_name } = req.data;
+
+        if (file_content) {
+            const buffer = Buffer.from(file_content, 'base64');
+            req.data.file_content = buffer;
+        }
+
+        if (file_name) {
+            req.data.file_name = file_name;
+        }
+    });
+
+    //READ FILE FROM HANA DB//
+    srv.on('READ', "ASSETS", async (req, next) => {
+        console.log("read handler");
+        const url = req._.req.path;
+
+        if (url.includes('file_content')) {
+            const id = req.data.file_id;
+            console.log(id);
+
+            try {
+                const ASSETS = await SELECT.one('file_id', 'file_name', 'file_type', 'file_content')
+                    .from('MYSERVICE_ASSETS')
+                    .where({ file_id: id });
+
+                console.log("assets ", ASSETS);
+
+                if (!ASSETS || !ASSETS.file_content) {
+                    req.reject(404, 'Asset not found for the ID or missing file_content');
+                    return;
+                }
+
+                req._.odataRes.setHeader("Content-Type", ASSETS.file_type);
+                req._.odataRes.setHeader(
+                    "Content-Disposition",
+                    `attachment; filename="${ASSETS.file_name}"`
+                );
+
+                // Convert the file content to a Buffer
+                const fileContentBuffer = Buffer.from(ASSETS.file_content);
+                console.log("fileContentBuffer 2 ", fileContentBuffer)
+
+                // Set the response body with the file content buffer
+                req._.odataRes.write(fileContentBuffer);
+                req._.odataRes.end();
+            } catch (error) {
+                console.error("Error reading asset: ", error);
+                req.reject(500, 'Internal Server Error');
+            }
+        } else {
+            return next();
+        }
+    });
+
+    // srv.on("DELETE", "DMS_ATT", async (req, next) => {
+
+    //     // console.log("delete dms")
+    //     const cmisService = cds.connect.to("DMS");
+    //     console.log("cmisService",cmisService)
+    //     const documentId = req.data.FILE_ID;
+    //     console.log("documentId",documentId);
+    //     const document = await cds.run(SELECT.one.from("MYSERVICE_DMS_ATT").where({ FILE_ID: documentId }));
+    //     console.log("document",document)
+    //     const data=`cmisAction=delete`;
+    //     console.log("data",data)
+    //     const headers={
+    //         "Content-Type":"application/x-www-form-urlencoded",
+    //         Accept: "*/*",
+    //     };
+    //     console.log("headers",headers)
+    //     const response= await cmisService.send({
+    //         method: "POST",
+    //         path: `/MEDICAL CLAIM/TEST REPORT/${document.FILE_ID}`,
+    //         data,
+    //         headers,
+    //       });
+    //       console.log("response",response)
+    //       console.log("DELETED")
+    //       return next();
+          
+    // });
+
+
+
+
+});
