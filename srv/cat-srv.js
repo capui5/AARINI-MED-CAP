@@ -441,9 +441,9 @@ module.exports = cds.service.impl(srv => {
     //         Accept: "*/*",
     //     };
     //     console.log("headers",headers)
-    //     const response= await cmisService.send({
+        // const response= await cmisService.send({
     //         method: "POST",
-    //         path: `/MEDICAL CLAIM/TEST REPORT/${document.FILE_ID}`,
+    //         path: `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${document.FILE_ID}`,
     //         data,
     //         headers,
     //       });
@@ -452,6 +452,39 @@ module.exports = cds.service.impl(srv => {
     //       return next();
           
     // });
+
+
+srv.before("DELETE", "DMS_ATT", async (req, next) => {
+ 
+    let tx = cds.transaction(req)
+    const cmisService = await cds.connect.to("DMS");
+    console.log("cmis service1",cmisService)
+    const documentId = req.data.FILE_ID;
+    console.log("documentId1",[documentId])
+    const document = await tx.run(
+      SELECT.one.from("MYSERVICE_DMS_ATT").where({
+        FILE_ID: documentId,
+      })
+    );
+    console.log("document1",document)
+    const data = `cmisAction=delete`;
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "*/*",
+    };
+    const response = await cmisService.send({
+      method: "POST",
+      path: `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${document.FILE_NAME_DMS}`,
+      data,
+      headers,
+    });
+    console.log("response1",response);
+     
+});
+
+// srv.on("UPDATE","DMS_ATT",async(req,next)=>{
+//     console.log("update dms called")
+// })
 
 
 

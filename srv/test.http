@@ -72,7 +72,12 @@ GET http://localhost:4004/odata/v4/my/ASSETS(facb9a3e-1c36-4703-a1f1-5bd820b8722
 GET  http://localhost:4004/odata/v4/my/DMS_ATT(04446c62-6bfb-40c3-ae90-203759cabbf3)/FILE_CONTENT
 
 ###
-DELETE  http://localhost:33281/odata/v4/my/DMS_ATT(04446c62-6bfb-40c3-ae90-203759cabbf3)
+DELETE  http://localhost:4004/odata/v4/my/DMS_ATT(3d9a840e-98d2-4cef-befa-2d30f73238be)
+
+###
+PATCH http://localhost:4004/odata/v4/my/DMS_ATT(6484b3a6-11f7-4fc1-9167-b01946d46f8e)
+
+
 
 
 
