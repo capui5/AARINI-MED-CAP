@@ -290,9 +290,7 @@ module.exports = cds.service.impl(srv => {
     });
 
 
-
-
-
+    
     srv.on("READ", "DMS_ATT", async (req, next) => {
         try {
             const url = req._.req.path;
@@ -425,68 +423,95 @@ module.exports = cds.service.impl(srv => {
         }
     });
 
-    // srv.on("DELETE", "DMS_ATT", async (req, next) => {
+    srv.before("DELETE", "DMS_ATT", async (req, next) => {
 
-    //     // console.log("delete dms")
-    //     const cmisService = cds.connect.to("DMS");
-    //     console.log("cmisService",cmisService)
-    //     const documentId = req.data.FILE_ID;
-    //     console.log("documentId",documentId);
-    //     const document = await cds.run(SELECT.one.from("MYSERVICE_DMS_ATT").where({ FILE_ID: documentId }));
-    //     console.log("document",document)
-    //     const data=`cmisAction=delete`;
-    //     console.log("data",data)
-    //     const headers={
-    //         "Content-Type":"application/x-www-form-urlencoded",
-    //         Accept: "*/*",
-    //     };
-    //     console.log("headers",headers)
-        // const response= await cmisService.send({
-    //         method: "POST",
-    //         path: `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${document.FILE_ID}`,
-    //         data,
-    //         headers,
-    //       });
-    //       console.log("response",response)
-    //       console.log("DELETED")
-    //       return next();
-          
-    // });
+        let tx = cds.transaction(req)
+        const cmisService = await cds.connect.to("DMS");
+        console.log("cmis service1", cmisService)
+        const documentId = req.data.FILE_ID;
+        console.log("documentId1", [documentId])
+        const document = await tx.run(
+            SELECT.one.from("MYSERVICE_DMS_ATT").where({
+                FILE_ID: documentId,
+            })
+        );
+        console.log("document1", document)
+        const data = `cmisAction=delete`;
+        const headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "*/*",
+        };
+        const response = await cmisService.send({
+            method: "POST",
+            path: `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${document.FILE_NAME_DMS}`,
+            data,
+            headers,
+        });
+        console.log("response1", response);
 
-
-srv.before("DELETE", "DMS_ATT", async (req, next) => {
- 
-    let tx = cds.transaction(req)
-    const cmisService = await cds.connect.to("DMS");
-    console.log("cmis service1",cmisService)
-    const documentId = req.data.FILE_ID;
-    console.log("documentId1",[documentId])
-    const document = await tx.run(
-      SELECT.one.from("MYSERVICE_DMS_ATT").where({
-        FILE_ID: documentId,
-      })
-    );
-    console.log("document1",document)
-    const data = `cmisAction=delete`;
-    const headers = {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "*/*",
-    };
-    const response = await cmisService.send({
-      method: "POST",
-      path: `/MEDICAL CLAIM/TEST REPORT/${document.POLICYNO}/${document.FILE_NAME_DMS}`,
-      data,
-      headers,
     });
-    console.log("response1",response);
+    srv.before("UPDATE", "DMS_ATT", async (req) => {
+        console.log("update handler");
+        req.data.FILE_NAME_DMS = req.data.FILE_NAME + new Date().toISOString();
+        await updatefile(req, req.data.FILE_NAME_DMS, req.data.FILE_CONTENT, req.data.POLICYNO);
+       
+        console.log("update file");
+    });
      
-});
+    async function updatefile(req, filename, binaryContent, policyno) {
+        const cmisService = await cds.connect.to("DMS");
+        console.log("cmis1", cmisService);
+        let contentBuffer = Buffer.from(binaryContent, "base64");
+        console.log("contentBuffer1", contentBuffer);
+     
+        var form = new FormData();
+        form.append("cmisaction", "createDocument");
+        form.append("propertyId[0]", "cmis:objectTypeId");
+        form.append("propertyValue[0]", "cmis:document");
+        form.append("propertyId[1]", "cmis:name");
 
-// srv.on("UPDATE","DMS_ATT",async(req,next)=>{
-//     console.log("update dms called")
-// })
-
-
-
-
+        const CRLF = "\r\n";
+        const options = {
+            header:
+                "--" +
+                form.getBoundary() +
+                CRLF +
+                `Content-Disposition: form-data; name="propertyValue[1]"` +
+                CRLF +
+                `Content-Type: text/plain;charset=UTF-8` +
+                CRLF +
+                CRLF,
+        };
+        form.append("propertyValue[1]", filename, options);
+        const fileOptions = {
+            header:
+                "--" +
+                form.getBoundary() +
+                CRLF +
+                `Content-Disposition: form-data; name="file"; filename*=UTF-8''${filename}` +
+                CRLF +
+                `Content-Type: ${req.data.MEDIA_TYPE}` +
+                CRLF +
+                CRLF,
+        };
+        form.append("dataFile", contentBuffer, fileOptions);
+        const data = form.getBuffer();
+        const headers = form.getHeaders();
+        console.log("headers1", headers);
+     
+        try {
+            const response = await cmisService.send({
+                method: "POST",
+                path: `/MEDICAL CLAIM/TEST REPORT/${req.data.POLICYNO}`,
+                data,
+                headers,
+            });
+            console.log("response1", response);
+     
+            req.data.FILE_CONTENT = null;
+        } catch (error) {
+            console.error("Error occurred during file upload:", error);
+            req.error("Error occurred during file upload:", error);
+        }
+    }
 });
